@@ -9,13 +9,13 @@ import {
   Button,
   Spinner,
   Callout,
-  Text,
 } from "@radix-ui/themes";
 import axios from "axios";
 import { redirect } from "next/navigation";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssueSchema } from "@/app/validationSchema";
+import ErrorMessage from "@/app/components/ErrorMessage";
 
 export default function NewIssuePage() {
   const {
@@ -27,7 +27,7 @@ export default function NewIssuePage() {
     resolver: zodResolver(createIssueSchema),
   });
   const [error, setError] = useState("");
-console.log(errors)
+  console.log(errors);
   return (
     <div className="max-w-[400px]">
       {error && (
@@ -53,15 +53,20 @@ console.log(errors)
               size="3"
               {...register("title")}
             />
-            {errors.title && <Text color='red'>{errors.title.message}</Text>}
+
+            <ErrorMessage text={errors?.title?.message} />
             <Controller
               name="description"
               control={control}
               render={({ field }) => (
                 <SimpleMDE placeholder="Description" {...field} />
               )}
-              />
-              {errors.description && <Text className="mt-[-25px]" color='red'>{errors.description.message}</Text>}
+            />
+
+            <ErrorMessage
+              text={errors?.description?.message}
+              style={"mt-[-25px]"}
+            />
           </Flex>
           <Button>Submit new issue</Button>
         </Box>
