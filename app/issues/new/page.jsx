@@ -9,19 +9,29 @@ import {
   Button,
   Spinner,
   Callout,
+  Text,
 } from "@radix-ui/themes";
 import axios from "axios";
 import { redirect } from "next/navigation";
 import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createIssueSchema } from "@/app/validationSchema";
 
 export default function NewIssuePage() {
-  const { register, control, handleSubmit, reset } = useForm();
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(createIssueSchema),
+  });
   const [error, setError] = useState("");
-
+console.log(errors)
   return (
     <div className="max-w-[400px]">
       {error && (
-        <Callout.Root color="red" className='mb-3'>
+        <Callout.Root color="red" className="mb-3">
           <Callout.Text>{error}</Callout.Text>
         </Callout.Root>
       )}
@@ -43,13 +53,15 @@ export default function NewIssuePage() {
               size="3"
               {...register("title")}
             />
+            {errors.title && <Text color='red'>{errors.title.message}</Text>}
             <Controller
               name="description"
               control={control}
               render={({ field }) => (
                 <SimpleMDE placeholder="Description" {...field} />
               )}
-            />
+              />
+              {errors.description && <Text className="mt-[-25px]" color='red'>{errors.description.message}</Text>}
           </Flex>
           <Button>Submit new issue</Button>
         </Box>
