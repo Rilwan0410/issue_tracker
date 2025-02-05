@@ -1,3 +1,7 @@
+"use client";
+
+import SimpleMDE from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
 import {
   Box,
   TextField,
@@ -9,12 +13,12 @@ import {
 
 export default function NewIssuePage() {
   return (
-    <Box maxWidth="400px" gap="3" >
-      <Flex direction="column" gap="3" className="mb-4" >
+    <Box maxWidth="400px" gap="3">
+      <Flex direction="column" gap="3" className="mb-4">
         <TextField.Root placeholder="Title" size="3" />
-        <TextArea placeholder="Reply to comment…" size="3" />
+        <SimpleMDE placeholder='Description' />
       </Flex>
-      <Button >Submit new issue</Button>
+      <Button>Submit new issue</Button>
     </Box>
   );
 }
