@@ -2,6 +2,7 @@
 import { useForm, Controller } from "react-hook-form";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
+
 import {
   Box,
   TextField,
@@ -44,6 +45,7 @@ export default function NewIssuePage() {
           try {
             setSubmitting(true);
             await axios.post("/api/issues", data);
+
             router.push("/issues");
           } catch (error) {
             setSubmitting(false);

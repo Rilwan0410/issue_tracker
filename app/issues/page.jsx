@@ -1,18 +1,15 @@
-import { Button } from "@radix-ui/themes";
 import IssueStatusBadge from "../components/IssueStatusBadge";
-import Link from "next/link";
 import { prisma } from "../../prisma/client";
-import { Table, Badge } from "@radix-ui/themes";
+import { Table } from "@radix-ui/themes";
+import IssueHeader from "./IssueHeader";
+
 
 export default async function IssuesPage() {
   const issues = await prisma.issue.findMany();
+
   return (
     <div>
-      <div className="mb-5">
-        <Button>
-          <Link href="/issues/new">New Issue</Link>
-        </Button>
-      </div>
+      <IssueHeader />
 
       <Table.Root variant="surface">
         <Table.Header>
