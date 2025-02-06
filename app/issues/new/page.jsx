@@ -11,13 +11,14 @@ import {
   Callout,
 } from "@radix-ui/themes";
 import axios from "axios";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createIssueSchema } from "@/app/validationSchema";
-import ErrorMessage from "@/app/components/ErrorMessage";
+import { createIssueSchema } from "../../validationSchema";
+import ErrorMessage from "../../components/ErrorMessage";
 
 export default function NewIssuePage() {
+  const router = useRouter();
   const {
     register,
     control,
@@ -26,8 +27,10 @@ export default function NewIssuePage() {
   } = useForm({
     resolver: zodResolver(createIssueSchema),
   });
+
   const [error, setError] = useState("");
-  console.log(errors);
+  const [submitting, setSubmitting] = useState(false);
+
   return (
     <div className="max-w-[400px]">
       {error && (
@@ -39,9 +42,11 @@ export default function NewIssuePage() {
         action=""
         onSubmit={handleSubmit(async (data) => {
           try {
+            setSubmitting(true);
             await axios.post("/api/issues", data);
-            redirect("/issues");
+            router.push("/issues");
           } catch (error) {
+            setSubmitting(false);
             setError("An Unexpected Error Has Occurred.");
           }
         })}
@@ -68,7 +73,7 @@ export default function NewIssuePage() {
               style={"mt-[-25px]"}
             />
           </Flex>
-          <Button>Submit new issue</Button>
+          <Button>Submit new issue {submitting && <Spinner />}</Button>
         </Box>
       </form>
     </div>
