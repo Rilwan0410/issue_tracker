@@ -18,7 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssueSchema } from "../../validationSchema";
 import ErrorMessage from "../../components/ErrorMessage";
 
-export default function IssueForm({ title, description }) {
+export default function IssueForm({ title, description, issueId }) {
   const router = useRouter();
   const {
     register,
@@ -44,7 +44,9 @@ export default function IssueForm({ title, description }) {
         onSubmit={handleSubmit(async (data) => {
           try {
             setSubmitting(true);
-            await apiCall("/api/issues", data);
+            if (title || description)
+              await axios.patch(`/api/issues/${issueId}`, data);
+            else await axios.post("/api/issues", data);
 
             router.push("/issues");
           } catch (error) {
@@ -58,7 +60,7 @@ export default function IssueForm({ title, description }) {
             <TextField.Root
               placeholder="Title"
               size="3"
-              value={title}
+              defaultValue={title}
               {...register("title")}
             />
 
@@ -66,12 +68,9 @@ export default function IssueForm({ title, description }) {
             <Controller
               name="description"
               control={control}
+              defaultValue={description}
               render={({ field }) => (
-                <SimpleMDE
-                  placeholder="Description"
-                  {...field}
-                  value={description}
-                />
+                <SimpleMDE placeholder="Description" {...field} />
               )}
             />
 
@@ -80,7 +79,12 @@ export default function IssueForm({ title, description }) {
               style={"mt-[-25px]"}
             />
           </Flex>
-          <Button>Submit new issue {submitting && <Spinner />}</Button>
+
+          {title || description ? (
+            <Button>Update issue {submitting && <Spinner />}</Button>
+          ) : (
+            <Button>Submit new issue {submitting && <Spinner />}</Button>
+          )}
         </Box>
       </form>
     </div>
