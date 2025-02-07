@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { Heading, Badge } from "@radix-ui/themes";
 import { Text, Card, Theme } from "@radix-ui/themes";
 import ReactMarkdown from "react-markdown";
+
+import IssueStatusBadge from "../../components/IssueStatusBadge";
 export default async function IssueDetailsPage({ params: { id } }) {
   const issue = await prisma.issue.findUnique({
     where: { id: Number(id) },
@@ -15,7 +17,7 @@ export default async function IssueDetailsPage({ params: { id } }) {
     <div>
       <Heading>{issue.title}</Heading>
       <div className="flex gap-3 items-center my-2">
-        <Badge>{issue.status}</Badge>
+        <IssueStatusBadge status={issue.status} />
         <Text>{issue.createdAt.toDateString()}</Text>
       </div>
 
