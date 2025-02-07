@@ -2,8 +2,8 @@ import React from "react";
 import { prisma } from "../../../prisma/client";
 import { notFound } from "next/navigation";
 import { Heading, Badge } from "@radix-ui/themes";
-import { Text, Card } from "@radix-ui/themes";
-
+import { Text, Card, Theme } from "@radix-ui/themes";
+import ReactMarkdown from "react-markdown";
 export default async function IssueDetailsPage({ params: { id } }) {
   const issue = await prisma.issue.findUnique({
     where: { id: Number(id) },
@@ -19,7 +19,11 @@ export default async function IssueDetailsPage({ params: { id } }) {
         <Text>{issue.createdAt.toDateString()}</Text>
       </div>
 
-      <Card>{issue.description}</Card>
+      <Card mt="4">
+        <ReactMarkdown className="prose text-gray-200 prose-strong:text-gray-200 prose-headings:text-gray-200">
+          {issue.description}
+        </ReactMarkdown>
+      </Card>
     </div>
   );
 }
