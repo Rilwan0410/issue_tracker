@@ -1,9 +1,10 @@
 import { Box, Grid, Flex } from "@radix-ui/themes";
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "../../../prisma/client";
-import ActionButton from "./edit/actionButton";
+import EditIssueButton from "./edit/EditIssueButton";
 import IssueDetails from "./edit/IssueDetails";
 import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
+import DeleteIssueButton from "../DeleteIssueButton";
 import axios from "axios";
 
 export default async function IssueDetailsPage({ params: { id } }) {
@@ -20,22 +21,8 @@ export default async function IssueDetailsPage({ params: { id } }) {
       </Box>
       <Box className="col-span-2">
         <Flex direction="column" gap="4">
-          <ActionButton
-            path={`/issues/${id}/edit`}
-            text="Edit Issue"
-            icon={<Pencil2Icon />}
-          />
-          <ActionButton
-            action={async () => {
-              "use server";
-              await axios.delete(`/api/issues/${id}`);
-              redirect("/issues");
-            }}
-            path={""}
-            text="Delete Issue"
-            icon={<TrashIcon />}
-            color="red"
-          />
+          <EditIssueButton issue={issue} />
+          <DeleteIssueButton issue={issue} />
         </Flex>
       </Box>
     </Grid>
