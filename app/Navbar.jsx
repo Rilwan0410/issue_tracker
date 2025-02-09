@@ -1,10 +1,16 @@
 "use client";
 import { useSession } from "next-auth/react";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { AiFillBug } from "react-icons/ai";
 import { usePathname } from "next/navigation";
-import { Box, DropdownMenu, Button, Flex } from "@radix-ui/themes";
+import {
+  Box,
+  DropdownMenu,
+  Flex,
+  Spinner,
+  Skeleton,
+} from "@radix-ui/themes";
 
 export default function Navbar() {
   const currentPath = usePathname();
@@ -41,6 +47,7 @@ export default function Navbar() {
         </ul>
       </Flex>
       <Box>
+        {status === "loading" && <Spinner/>}
         {status === "authenticated" && (
           <>
             <DropdownMenu.Root>
