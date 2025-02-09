@@ -24,3 +24,14 @@ export async function PATCH(req, { params: { id } }) {
 
   return NextResponse.json(editedIssue, { status: 201 });
 }
+
+export async function DELETE(req, { params: { id } }) {
+  const issue = await prisma.issue.findUnique({ where: { id: Number(id) } });
+  if (!issue)
+    return NextResponse.json(
+      { error: "issue with that Id doesn't exist" },
+      { status: 400 }
+    );
+  const issueToDelete = await prisma.issue.delete({ where: { id: Number(id) } });
+  return NextResponse.json(issueToDelete, { status: 200 });
+}

@@ -1,7 +1,7 @@
 import "@radix-ui/themes/styles.css";
 import "./globals.css";
 import { Theme, ThemePanel } from "@radix-ui/themes";
-
+import { Container } from "@radix-ui/themes";
 import Navbar from "./Navbar";
 
 export default function RootLayout({ children }) {
@@ -10,7 +10,10 @@ export default function RootLayout({ children }) {
       <body>
         <Theme accentColor="mint" grayColor="gray" appearance="dark">
           <Navbar />
-          <main className="p-5">{children}</main>
+          <main className="p-5">
+
+            <Container>{children}</Container>
+            </main>
           {/* <ThemePanel /> */}
         </Theme>
       </body>
