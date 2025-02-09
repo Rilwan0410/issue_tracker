@@ -8,6 +8,15 @@ import axios from "axios";
 export default function DeleteIssueButton({ issue }) {
   const router = useRouter();
   const [error, setError] = useState("");
+
+  async function deleteIssue() {
+    try {
+      await axios.delete(`/api/issues/${issue.id}`);
+      router.push("/issues");
+    } catch (error) {
+      setError("This issue could not be deleted.");
+    }
+  }
   return (
     <>
       <AlertDialog.Root>
@@ -29,18 +38,7 @@ export default function DeleteIssueButton({ issue }) {
               </Button>
             </AlertDialog.Cancel>
             <AlertDialog.Action>
-              <Button
-                variant="solid"
-                color="red"
-                onClick={async () => {
-                  try {
-                    await axios.delete(`/api/jissues/${issue.id}`);
-                    router.push("/issues");
-                  } catch (error) {
-                    setError("This issue could not be deleted.");
-                  }
-                }}
-              >
+              <Button variant="solid" color="red" onClick={deleteIssue}>
                 Delete Issue
               </Button>
             </AlertDialog.Action>
