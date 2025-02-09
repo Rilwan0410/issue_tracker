@@ -10,15 +10,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Theme accentColor="mint" grayColor="gray" appearance="dark">
-          <Navbar />
-          <main className="p-5">
-            <Container>
-              <AuthProvider>{children}</AuthProvider>
-            </Container>
-          </main>
-          {/* <ThemePanel /> */}
-        </Theme>
+        <AuthProvider>
+          <Theme accentColor="mint" grayColor="gray" appearance="dark">
+            <Navbar />
+            <main className="p-5">
+              <Container>{children}</Container>
+            </main>
+            {/* <ThemePanel /> */}
+          </Theme>
+        </AuthProvider>
       </body>
     </html>
   );
