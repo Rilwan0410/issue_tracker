@@ -10,7 +10,12 @@ import { ArrowUpIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 export default async function IssuesPage({
   searchParams: { filterBy, orderBy },
 }) {
-  const orderByObj = orderBy ? { [orderBy]: "asc" } : undefined;
+  const orderByObj =
+    (orderBy && orderBy === "status") ||
+    orderBy === "title" ||
+    orderBy === "createdAt"
+      ? { [orderBy]: "asc" }
+      : undefined;
   const issues =
     (filterBy !== "null" && filterBy === "OPEN") ||
     filterBy === "CLOSED" ||
