@@ -1,13 +1,14 @@
-import { Box, Grid, Flex } from "@radix-ui/themes";
-import { notFound, redirect } from "next/navigation";
+import { Box, Flex, Grid } from "@radix-ui/themes";
+import { getServerSession } from "next-auth";
+import { notFound } from "next/navigation";
 import { prisma } from "../../../prisma/client";
+import { authOptions } from "../../api/auth/authOptions";
+import DeleteIssueButton from "../DeleteIssueButton";
 import EditIssueButton from "./edit/EditIssueButton";
 import IssueDetails from "./edit/IssueDetails";
-import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
-import DeleteIssueButton from "../DeleteIssueButton";
-import axios from "axios";
-
+import AssigneeSelect from "./AssigneeSelect";
 export default async function IssueDetailsPage({ params: { id } }) {
+  const session = await getServerSession(authOptions);
   const issue = await prisma.issue.findUnique({
     where: { id: Number(id) },
   });
@@ -20,10 +21,13 @@ export default async function IssueDetailsPage({ params: { id } }) {
         <IssueDetails issue={issue} />
       </Box>
       <Box className="col-span-2">
-        <Flex direction="column" gap="4">
-          <EditIssueButton issue={issue} />
-          <DeleteIssueButton issue={issue} />
-        </Flex>
+        {session && (
+          <Flex direction="column" gap="4">
+            <AssigneeSelect />
+            <EditIssueButton issue={issue} />
+            <DeleteIssueButton issue={issue} />
+          </Flex>
+        )}
       </Box>
     </Grid>
   );

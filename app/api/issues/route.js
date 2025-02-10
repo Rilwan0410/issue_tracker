@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../prisma/client";
-import { z } from "zod";
 import { createIssueSchema } from "../../validationSchema";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/authOptions";
 
 export async function POST(req) {
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json({}, { status: 401 });
   const body = await req.json();
   const validation = createIssueSchema.safeParse(body);
 
@@ -19,4 +22,3 @@ export async function POST(req) {
 
   return NextResponse.json(newIssue);
 }
-
