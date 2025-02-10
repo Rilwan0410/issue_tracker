@@ -4,8 +4,11 @@ import Links from "../components/Links";
 import { Table, Link } from "@radix-ui/themes";
 import IssueHeader from "./IssueHeader";
 
-export default async function IssuesPage() {
-  const issues = await prisma.issue.findMany();
+export default async function IssuesPage({ params, searchParams }) {
+  const { filterBy } = await searchParams;
+  const issues = filterBy !=='null'
+    ? await prisma.issue.findMany({ where: { status: filterBy } })
+    : await prisma.issue.findMany();
 
   return (
     <div>

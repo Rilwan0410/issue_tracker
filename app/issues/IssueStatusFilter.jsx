@@ -1,7 +1,10 @@
+"use client";
 import { Select } from "@radix-ui/themes";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 export default function IssueStatusFilter() {
+  const router = useRouter();
   const statuses = [
     { label: "All", value: null },
     { label: "Open", value: "OPEN" },
@@ -9,7 +12,12 @@ export default function IssueStatusFilter() {
     { label: "Closed", value: "CLOSED" },
   ];
   return (
-    <Select.Root>
+    <Select.Root
+      onValueChange={(val) => {
+        console.log(val);
+        router.push("/issues?filterBy=" + val);
+      }}
+    >
       <Select.Trigger placeholder="Filter By Status..." />
       <Select.Content>
         <Select.Group>
