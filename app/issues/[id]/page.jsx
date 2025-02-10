@@ -25,7 +25,7 @@ export default async function IssueDetailsPage({ params: { id } }) {
       <Box className="col-span-2">
         {session && (
           <Flex direction="column" gap="4">
-            <AssigneeSelect users={users} />
+            <AssigneeSelect users={users} issue={issue}/>
             <EditIssueButton issue={issue} />
             <DeleteIssueButton issue={issue} />
           </Flex>
