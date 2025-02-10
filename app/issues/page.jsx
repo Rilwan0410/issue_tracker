@@ -1,15 +1,31 @@
 import IssueStatusBadge from "../components/IssueStatusBadge";
+import Link from "next/link";
+// import TableHeaders from "./TableHeaders";
 import { prisma } from "../../prisma/client";
 import Links from "../components/Links";
-import { Table, Link } from "@radix-ui/themes";
+import { Table } from "@radix-ui/themes";
 import IssueHeader from "./IssueHeader";
+import { ArrowUpIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 
-export default async function IssuesPage({ params, searchParams }) {
-  const { filterBy } = await searchParams;
-  const issues = filterBy !=='null'
-    ? await prisma.issue.findMany({ where: { status: filterBy } })
-    : await prisma.issue.findMany();
+export default async function IssuesPage({
+  searchParams: { filterBy, orderBy },
+}) {
+  const orderByObj = orderBy ? { [orderBy]: "asc" } : undefined;
+  const issues =
+    (filterBy !== "null" && filterBy === "OPEN") ||
+    filterBy === "CLOSED" ||
+    filterBy === "IN_PROGRESS"
+      ? await prisma.issue.findMany({
+          where: { status: filterBy },
+          orderBy: orderByObj,
+        })
+      : await prisma.issue.findMany({ orderBy: orderByObj });
 
+  const columns = [
+    { label: "Issue", value: "title", styles: "" },
+    { label: "Status", value: "status", styles: "hidden md:table-cell" },
+    { label: "Created", value: "createdAt", styles: "hidden md:table-cell" },
+  ];
   return (
     <div>
       <IssueHeader />
@@ -17,13 +33,22 @@ export default async function IssuesPage({ params, searchParams }) {
       <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell>Issue</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Status
-            </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Created
-            </Table.ColumnHeaderCell>
+            {columns.map((col, i) => (
+              <Table.ColumnHeaderCell key={i} className={col.styles}>
+                <Link
+                  href={`/issues${
+                    !filterBy
+                      ? `?orderBy=${col.value}`
+                      : `?filterBy=${filterBy}&orderBy=${col.value}`
+                  }`}
+                >
+                  {col.label}
+                  {col.value === orderBy && (
+                    <ArrowUpIcon className="inline ml-1" />
+                  )}
+                </Link>
+              </Table.ColumnHeaderCell>
+            ))}
           </Table.Row>
         </Table.Header>
 

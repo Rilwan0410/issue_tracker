@@ -14,7 +14,6 @@ export default function IssueStatusFilter() {
   return (
     <Select.Root
       onValueChange={(val) => {
-        console.log(val);
         router.push("/issues?filterBy=" + val);
       }}
     >
