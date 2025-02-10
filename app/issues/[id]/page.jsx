@@ -7,12 +7,13 @@ import DeleteIssueButton from "../DeleteIssueButton";
 import EditIssueButton from "./edit/EditIssueButton";
 import IssueDetails from "./edit/IssueDetails";
 import AssigneeSelect from "./AssigneeSelect";
+
 export default async function IssueDetailsPage({ params: { id } }) {
   const session = await getServerSession(authOptions);
   const issue = await prisma.issue.findUnique({
     where: { id: Number(id) },
   });
-  const users = await prisma.user.findMany({orderBy:{name:'asc'}});
+  const users = await prisma.user.findMany({ orderBy: { name: "asc" } });
   // console.log(users)
 
   if (!issue) return notFound();
@@ -25,7 +26,7 @@ export default async function IssueDetailsPage({ params: { id } }) {
       <Box className="col-span-2">
         {session && (
           <Flex direction="column" gap="4">
-            <AssigneeSelect users={users} issue={issue}/>
+            <AssigneeSelect users={users} issue={issue} />
             <EditIssueButton issue={issue} />
             <DeleteIssueButton issue={issue} />
           </Flex>
