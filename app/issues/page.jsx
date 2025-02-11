@@ -1,6 +1,6 @@
 import IssueStatusBadge from "../components/IssueStatusBadge";
 import Link from "next/link";
-// import TableHeaders from "./TableHeaders";
+import Pagination from "../components/Pagination";
 import { prisma } from "../../prisma/client";
 import Links from "../components/Links";
 import { Table } from "@radix-ui/themes";
@@ -8,7 +8,7 @@ import IssueHeader from "./IssueHeader";
 import { ArrowUpIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 
 export default async function IssuesPage({
-  searchParams: { filterBy, orderBy },
+  searchParams: { filterBy, orderBy, page },
 }) {
   const orderByObj =
     (orderBy && orderBy === "status") ||
@@ -16,6 +16,10 @@ export default async function IssuesPage({
     orderBy === "createdAt"
       ? { [orderBy]: "asc" }
       : undefined;
+
+  const currentPage = Number(page) || 1;
+  const pageSize = 10;
+
   const issues =
     (filterBy !== "null" && filterBy === "OPEN") ||
     filterBy === "CLOSED" ||
@@ -23,9 +27,21 @@ export default async function IssuesPage({
       ? await prisma.issue.findMany({
           where: { status: filterBy },
           orderBy: orderByObj,
+          skip: (currentPage - 1) * pageSize,
+          take: pageSize,
         })
-      : await prisma.issue.findMany({ orderBy: orderByObj });
+      : await prisma.issue.findMany({
+          orderBy: orderByObj,
+          skip: (currentPage - 1) * pageSize,
+          take: pageSize,
+        });
 
+  const issueCount =
+    (filterBy !== "null" && filterBy === "OPEN") ||
+    filterBy === "CLOSED" ||
+    filterBy === "IN_PROGRESS"
+      ? await prisma.issue.count({ where: { status: filterBy } })
+      : await prisma.issue.count();
   const columns = [
     { label: "Issue", value: "title", styles: "" },
     { label: "Status", value: "status", styles: "hidden md:table-cell" },
@@ -78,6 +94,11 @@ export default async function IssuesPage({
           })}
         </Table.Body>
       </Table.Root>
+      <Pagination
+        pageSize={pageSize}
+        currentPage={currentPage}
+        itemCount={issueCount}
+      />
     </div>
   );
 }
