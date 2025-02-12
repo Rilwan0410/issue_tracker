@@ -15,7 +15,7 @@ export default async function IssuesPage({
     orderBy === "title" ||
     orderBy === "createdAt"
       ? { [orderBy]: "asc" }
-      : undefined;
+      : { createdAt: "desc" };
 
   const currentPage = Number(page) || 1;
   const pageSize = 10;

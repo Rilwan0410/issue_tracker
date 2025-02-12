@@ -24,7 +24,7 @@ export default async function Home({ searchParams: { page } }) {
       <Flex
         direction="column"
         justify={{ md: "between" }}
-        gap={{ initial: "5", md: "0" }}
+        gap={{ initial: "5", md: "3" }}
       >
         <IssueSummary {...propsObj} />
         <IssueChart {...propsObj} />

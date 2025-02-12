@@ -1,20 +1,17 @@
 "use client";
+import { Avatar } from "@radix-ui/themes";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import Link from "next/link";
 import { AiFillBug } from "react-icons/ai";
 import { usePathname } from "next/navigation";
-import {
-  Box,
-  DropdownMenu,
-  Flex,
-  Spinner,
-  Skeleton,
-} from "@radix-ui/themes";
+import { Box, DropdownMenu, Flex, Spinner, Skeleton } from "@radix-ui/themes";
 
 export default function Navbar() {
   const currentPath = usePathname();
   const { status, data: session } = useSession();
+  console.log(session)
+
   const links = [
     { label: "Dashboard", path: "/" },
     { label: "Issues", path: "/issues" },
@@ -45,19 +42,22 @@ export default function Navbar() {
         </ul>
       </Flex>
       <Box>
-        {status === "loading" && <Spinner/>}
+        {status === "loading" && <Spinner />}
         {status === "authenticated" && (
           <>
             <DropdownMenu.Root>
               <DropdownMenu.Trigger>
-                <img
-                  src={session.user.image || ""}
-                  className="h-[40px] cursor-pointer rounded-full"
-                  alt=""
+                <Avatar
+                  src={session?.user.image}
+                  fallback="?"
+                  className="cursor-pointer "
+                  radius="full"
+                  alt="User Icon"
+                  variant="solid"
                 />
               </DropdownMenu.Trigger>
               <DropdownMenu.Content className="p-2">
-                <span>{session.user.email}</span>
+                <span>{session?.user.email}</span>
                 <DropdownMenu.Separator />
                 <DropdownMenu.Item>
                   <Link href="/api/auth/signout">Logout</Link>
