@@ -102,3 +102,7 @@ export default async function IssuesPage({
     </div>
   );
 }
+export const metadata = {
+  title: "Issue Tracker - Issues",
+  description: "View all project issues ",
+};

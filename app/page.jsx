@@ -20,7 +20,7 @@ export default async function Home({ searchParams: { page } }) {
     inProgress: inProgressIssues,
   };
   return (
-    <Grid columns={{ initial: "1", md: "2" }} gap="9" className='pt-6'>
+    <Grid columns={{ initial: "1", md: "2" }} gap="9" className="pt-6">
       <Flex
         direction="column"
         justify={{ md: "between" }}
@@ -33,3 +33,8 @@ export default async function Home({ searchParams: { page } }) {
     </Grid>
   );
 }
+
+export const metadata = {
+  title: "Issue Tracker - Dashboard",
+  description: "View summary of project issues",
+};
