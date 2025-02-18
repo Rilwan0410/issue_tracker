@@ -7,25 +7,23 @@ import { Table } from "@radix-ui/themes";
 import IssueHeader from "./IssueHeader";
 import { ArrowUpIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 
-export default async function IssuesPage({
-  searchParams: { filterBy, orderBy, page },
-}) {
+export default async function IssuesPage({ searchParams }) {
   const orderByObj =
-    (orderBy && orderBy === "status") ||
-    orderBy === "title" ||
-    orderBy === "createdAt"
-      ? { [orderBy]: "asc" }
+    (searchParams.orderBy && searchParams.orderBy === "status") ||
+    searchParams.orderBy === "title" ||
+    searchParams.orderBy === "createdAt"
+      ? { [searchParams.orderBy]: "asc" }
       : { createdAt: "desc" };
 
-  const currentPage = Number(page) || 1;
+  const currentPage = Number(searchParams.page) || 1;
   const pageSize = 10;
 
   const issues =
-    (filterBy !== "null" && filterBy === "OPEN") ||
-    filterBy === "CLOSED" ||
-    filterBy === "IN_PROGRESS"
+    (searchParams.filterBy !== "null" && searchParams.filterBy === "OPEN") ||
+    searchParams.filterBy === "CLOSED" ||
+    searchParams.filterBy === "IN_PROGRESS"
       ? await prisma.issue.findMany({
-          where: { status: filterBy },
+          where: { status: searchParams.filterBy },
           orderBy: orderByObj,
           skip: (currentPage - 1) * pageSize,
           take: pageSize,
@@ -37,10 +35,10 @@ export default async function IssuesPage({
         });
 
   const issueCount =
-    (filterBy !== "null" && filterBy === "OPEN") ||
-    filterBy === "CLOSED" ||
-    filterBy === "IN_PROGRESS"
-      ? await prisma.issue.count({ where: { status: filterBy } })
+    (searchParams.filterBy !== "null" && searchParams.filterBy === "OPEN") ||
+    searchParams.filterBy === "CLOSED" ||
+    searchParams.filterBy === "IN_PROGRESS"
+      ? await prisma.issue.count({ where: { status: searchParams.filterBy } })
       : await prisma.issue.count();
   const columns = [
     { label: "Issue", value: "title", styles: "" },
@@ -58,13 +56,13 @@ export default async function IssuesPage({
               <Table.ColumnHeaderCell key={i} className={col.styles}>
                 <Link
                   href={`/issues${
-                    !filterBy
+                    !searchParams.filterBy
                       ? `?orderBy=${col.value}`
-                      : `?filterBy=${filterBy}&orderBy=${col.value}`
+                      : `?filterBy=${searchParams.filterBy}&orderBy=${col.value}`
                   }`}
                 >
                   {col.label}
-                  {col.value === orderBy && (
+                  {col.value === searchParams.orderBy && (
                     <ArrowUpIcon className="inline ml-1" />
                   )}
                 </Link>

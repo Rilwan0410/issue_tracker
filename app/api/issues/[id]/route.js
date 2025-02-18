@@ -4,7 +4,7 @@ import { prisma } from "../../../../prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/authOptions";
 
-export async function PATCH(req, { params: { id } }) {
+export async function PATCH(req, { params }) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({}, { status: 401 });
 
@@ -22,7 +22,7 @@ export async function PATCH(req, { params: { id } }) {
     if (!user)
       return NextResponse({ error: "User does not exist" }, { status: 400 });
   }
-  const issue = await prisma.issue.findUnique({ where: { id: Number(id) } });
+  const issue = await prisma.issue.findUnique({ where: { id: Number(params.id) } });
 
   if (!issue)
     return NextResponse.json(
@@ -31,7 +31,7 @@ export async function PATCH(req, { params: { id } }) {
     );
 
   const editedIssue = await prisma.issue.update({
-    where: { id: Number(id) },
+    where: { id: Number(params.id) },
     data: {
       title: body.title,
       description: body.description,
@@ -42,17 +42,17 @@ export async function PATCH(req, { params: { id } }) {
   return NextResponse.json(editedIssue, { status: 201 });
 }
 
-export async function DELETE(req, { params: { id } }) {
+export async function DELETE(req, { params }) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({}, { status: 401 });
-  const issue = await prisma.issue.findUnique({ where: { id: Number(id) } });
+  const issue = await prisma.issue.findUnique({ where: { id: Number(params.id) } });
   if (!issue)
     return NextResponse.json(
       { error: "issue with that Id doesn't exist" },
       { status: 400 }
     );
   const issueToDelete = await prisma.issue.delete({
-    where: { id: Number(id) },
+    where: { id: Number(params.id) },
   });
   return NextResponse.json(issueToDelete, { status: 200 });
 }

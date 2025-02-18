@@ -8,10 +8,10 @@ import EditIssueButton from "./edit/EditIssueButton";
 import IssueDetails from "./edit/IssueDetails";
 import AssigneeSelect from "./AssigneeSelect";
 
-export default async function IssueDetailsPage({ params: { id } }) {
+export default async function IssueDetailsPage({ params }) {
   const session = await getServerSession(authOptions);
   const issue = await prisma.issue.findUnique({
-    where: { id: Number(id) },
+    where: { id: Number(params.id) },
   });
   const users = await prisma.user.findMany({ orderBy: { name: "asc" } });
   // console.log(users)
@@ -36,8 +36,8 @@ export default async function IssueDetailsPage({ params: { id } }) {
   );
 }
 
-export async function generateMetadata({ params: { id } }) {
-  const issue = await prisma.issue.findUnique({ where: { id: Number(id) } });
+export async function generateMetadata({ params }) {
+  const issue = await prisma.issue.findUnique({ where: { id: Number(params.id) } });
   return {
     title: issue?.title,
     description: `Details of issue ${issue?.id}`,
