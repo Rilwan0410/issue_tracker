@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createIssueSchema, patchIssueSchema } from "../../../validationSchema";
 import { prisma } from "../../../../prisma/client";
 import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/authOptions";
 
 export async function PATCH(req, { params: { id } }) {
   const session = await getServerSession(authOptions);
@@ -42,6 +43,7 @@ export async function PATCH(req, { params: { id } }) {
 }
 
 export async function DELETE(req, { params: { id } }) {
+
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({}, { status: 401 });
   const issue = await prisma.issue.findUnique({ where: { id: Number(id) } });

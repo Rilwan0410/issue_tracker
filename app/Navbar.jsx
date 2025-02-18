@@ -10,7 +10,7 @@ import { Box, DropdownMenu, Flex, Spinner, Skeleton } from "@radix-ui/themes";
 export default function Navbar() {
   const currentPath = usePathname();
   const { status, data: session } = useSession();
-  console.log(session)
+  // console.log(session)
 
   const links = [
     { label: "Dashboard", path: "/" },
