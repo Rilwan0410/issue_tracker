@@ -4,7 +4,10 @@ import IssueSummary from "./IssueSummary";
 import IssueChart from "./IssueChart";
 import { prisma } from "../prisma/client";
 
+export const revalidate = 120
+
 export default async function Home({ searchParams }) {
+  
 
   const openIssues = await prisma.issue.count({ where: { status: "OPEN" } });
 
@@ -15,9 +18,6 @@ export default async function Home({ searchParams }) {
     where: { status: "CLOSED" },
   });
 
-  console.log(openIssues)
-  console.log(closedIssues)
-  console.log(inProgressIssues)
 
 
   const propsObj = {
