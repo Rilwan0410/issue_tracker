@@ -5,6 +5,7 @@ import IssueChart from "./IssueChart";
 import { prisma } from "../prisma/client";
 
 export default async function Home({ searchParams }) {
+
   const openIssues = await prisma.issue.count({ where: { status: "OPEN" } });
 
   const closedIssues = await prisma.issue.count({
@@ -13,6 +14,11 @@ export default async function Home({ searchParams }) {
   const inProgressIssues = await prisma.issue.count({
     where: { status: "CLOSED" },
   });
+
+  console.log(openIssues)
+  console.log(closedIssues)
+  console.log(inProgressIssues)
+
 
   const propsObj = {
     open: openIssues,
