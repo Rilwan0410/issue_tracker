@@ -5,6 +5,8 @@ import { Container } from "@radix-ui/themes";
 import Navbar from "./Navbar";
 import AuthProvider from "./api/auth/AuthProvider";
 
+
+
 export default function RootLayout({ children }) {
   // console.log(session)
   return (
