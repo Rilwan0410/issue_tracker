@@ -7,7 +7,7 @@ export default async function EditIssuePage({ params }) {
   return (
     <IssueForm
       title={issue.title}
-      issueId={id}
+      issueId={params.id}
       description={issue.description}
     />
   );
