@@ -4,12 +4,6 @@ import { prisma } from "../../../../prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/authOptions";
 
-interface RouteParams {
-  params: {
-    id: string;
-  };
-}
-
 export async function PATCH(req, { params: { id } }) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({}, { status: 401 });
@@ -48,7 +42,7 @@ export async function PATCH(req, { params: { id } }) {
   return NextResponse.json(editedIssue, { status: 201 });
 }
 
-export async function DELETE(req, { RouteParams }: { params: { id } }) {
+export async function DELETE(req, { params: { id } }) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({}, { status: 401 });
   const issue = await prisma.issue.findUnique({ where: { id: Number(id) } });
