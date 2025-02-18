@@ -69,9 +69,9 @@ export default function IssueForm({ title, description, issueId }) {
 
             <ErrorMessage text={errors?.title?.message} />
             <Controller
-              name="description"
+              name="description" 
               control={control}
-              defaultValue={description}
+              defaultValue={description} 
               render={({ field }) => (
                 <SimpleMDE placeholder="Description" {...field} />
               )}
